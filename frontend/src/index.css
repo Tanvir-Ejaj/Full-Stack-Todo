@@ -1,0 +1,27 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  overflow: hidden;
+  background: #e8ecf1;
+}
+
+.main-box{
+  width: 100%;
+  height: 100vh;
+}
+
+.white-box {
+  text-align: center;
+  padding: 100px 50px;
+  width: 100%;
+  height: 100%;
+  background: #FFFFFF;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+}
