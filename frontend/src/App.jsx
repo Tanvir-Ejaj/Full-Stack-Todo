@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import ForgetPassword from "./pages/ForgetPassword";
 import NewPassword from "./pages/NewPassword";
 import Todo from "./pages/Todo";
+// import ResendOtp from "./pages/ResendOtp";
 
 function App() {
   const router = createBrowserRouter(
@@ -18,6 +19,7 @@ function App() {
         <Route path="/" element={<Registration />} />
         <Route path="/otpverification/:email" element={<OtpVerfication />} />
         <Route path="/login" element={<Login />} />
+        {/* <Route path="/resendotp" element={<ResendOtp />} /> */}
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/newpassword/:token" element={<NewPassword />} />
         <Route path="/todo" element={<Todo />} />

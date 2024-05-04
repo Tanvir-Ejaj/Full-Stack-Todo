@@ -1,45 +1,49 @@
 import React, { useState } from "react";
-import { Button, Form, Input, Col, Row, message, Flex } from "antd";
+import {
+  Button,
+  Checkbox,
+  Form,
+  Input,
+  Col,
+  Divider,
+  Row,
+  message,
+  Space,
+  Flex,
+} from "antd";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
-const Login = () => {
+const ResendOtp = () => {
   const [form] = Form.useForm();
   let [loading, setLoading] = useState(false);
-  let navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
+  let navigate = useNavigate();
 
   const onFinish = async (values) => {
     setLoading(true);
-    let data = await axios.post("http://localhost:8000/api/v1/auth/login", {
-      email: values.email,
-      password: values.password,
-    });
-
-    if (
-      data.data.error === "user not found" ||
-      data.data.error === "Please Verify Your Account" ||
-      data.data.error === "Crendential Not Match"
-    ) {
+    let data = await axios.post(
+      "http://localhost:8000/api/v1/auth/resendotp",
+      {
+        email: values.email,
+      }
+    );
+    if (data.data.error === "User not found") {
+      form.resetFields();
+      setLoading(false);
       messageApi.open({
         type: "error",
         content: data.data.error,
       });
-      setLoading(false);
-      if (data.data.error === "Please Verify Your Account") {
-        setTimeout(() => {
-          navigate(`/otpverification/${values.email}`);
-        }, 3000);
-      }
     } else {
+      form.resetFields();
+      setLoading(false);
       messageApi.open({
         type: "success",
         content: data.data.success,
       });
-      setLoading(false);
-      form.resetFields();
       setTimeout(() => {
-        navigate("/todo");
+        navigate(`/otpverification/${values.email}`);
       }, 3000);
     }
   };
@@ -49,12 +53,6 @@ const Login = () => {
   return (
     <>
       {contextHolder}
-      {/* {(successAlert && (
-        <Alert message={successAlert} type="success" showIcon closable />
-      )) ||
-        (errorAlert && (
-          <Alert message={errorAlert} type="error" showIcon closable />
-        ))} */}
       <Row justify="center" align="middle" className="main-box">
         <Col span={18}>
           <Row justify="center" align="middle">
@@ -63,7 +61,6 @@ const Login = () => {
                 <Form
                   form={form}
                   name="basic"
-                  layout="vertical"
                   labelCol={{
                     span: 8,
                   }}
@@ -86,28 +83,16 @@ const Login = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Please input your Email!",
+                        message: "Please Enter your Email!",
                       },
                     ]}
                   >
                     <Input />
                   </Form.Item>
                   <Form.Item
-                    label="Password"
-                    name="password"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please input your password!",
-                      },
-                    ]}
-                  >
-                    <Input.Password />
-                  </Form.Item>
-                  <Form.Item
                     wrapperCol={{
-                      offset: 0,
-                      span: 24,
+                      offset: 3,
+                      span: 16,
                     }}
                   >
                     <Button
@@ -116,20 +101,9 @@ const Login = () => {
                       loading={loading}
                       disabled={loading}
                     >
-                      Login
+                      Resend OTP
                     </Button>
                   </Form.Item>
-                  <Flex justify="space-between">
-                    <Link to="/forgetpassword" className="forget">
-                      Forget Password
-                    </Link>
-                    <p>
-                      Don't have an Account?
-                      <Link to="/" className="forget">
-                        <span> </span>Sign Up
-                      </Link>
-                    </p>
-                  </Flex>
                 </Form>
               </div>
             </Col>
@@ -140,4 +114,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ResendOtp;

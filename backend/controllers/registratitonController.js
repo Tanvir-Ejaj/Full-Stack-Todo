@@ -1,7 +1,7 @@
 const User = require("../model/userModel");
+const otpGenerator = require("otp-generator");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
-const otpGenerator = require("otp-generator");
 
 let registrationController = async (req, res) => {
   const { name, email, password } = req.body;
@@ -17,27 +17,33 @@ let registrationController = async (req, res) => {
   let existingUser = await User.find({ email: email });
 
   if (existingUser.length > 0) {
-    return res.send({ response: `${email} already in use` });
+    return res.send({ error: "email already in use" });
   } else {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "tanvirejij@gmail.com",
-        pass: "cjyl tktx lbtd pqlc",
-      },
-    });
 
+    
     let otp = otpGenerator.generate(6, {
       upperCaseAlphabets: false,
       specialChars: false,
     });
 
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "tanvirejij@gmail.com",
+        pass: "rcre rwdm dxyw gtlm",
+      },
+    });
     const info = await transporter.sendMail({
-      from: '"Todo app👻"<tanvirejij@gmail.com>',
+      from: '"RealTodo"<tanvirejij@gmail.com>',
       to: email,
       subject: "Verification",
-      html: `<b>This is your verification code :</b>${otp}`,
+      html: `<b>This is your verification code: ${otp}</b>`,
     });
+    // async function main() {
+    //   console.log("Message sent: %s", info.messageId);
+    // }
+    // main().catch(console.error);
 
     bcrypt.hash(password, 10, async function (err, hash) {
       let user = new User({
@@ -46,15 +52,42 @@ let registrationController = async (req, res) => {
         password: hash,
         otp: otp,
       });
-
       user.save();
+
       res.send({
         success: "Registration Successfull. Please Check Your Email",
-        name: name,
-        email: email,
+        name: user.name,
+        email: user.email,
       });
     });
   }
 };
 
 module.exports = registrationController;
+
+// const transporter = nodemailer.createTransport({
+//   service: "gmail",
+//   port: 465,
+//   secure: true,
+//   auth: {
+//     user: "tanvirejij@gmail.com",
+//     pass: "whxx ihcz khof rdxb",
+//   },
+//   logger: true, // Enable logging
+//   debug: true, // Debug mode
+// });
+
+// const info = await transporter.sendMail({
+//   from: '"Todo2"<tanvirejij@gmail.com>',
+//   to: email,
+//   subject: "Verification",
+//   html: `<b>This is your verification code: ${otp}</b>`,
+// });
+
+// transporter.verify((error, success) => {
+//   if (error) {
+//     console.error("SMTP server connection error:", error);
+//   } else {
+//     console.log("SMTP server connection success:", success);
+//   }
+// });

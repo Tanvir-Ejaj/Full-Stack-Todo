@@ -13,17 +13,17 @@ let forgetPasswordController = async (req, res) => {
         service: "gmail",
         auth: {
           user: "tanvirejij@gmail.com",
-          pass: "cjyl tktx lbtd pqlc",
+          pass: "rcre rwdm dxyw gtlm",
         },
       });
 
       const info = await transporter.sendMail({
-        from: '"Todo app👻"<tanvirejij@gmail.com>',
+        from: '"Todo app"<tanvirejij@gmail.com>',
         to: email,
         subject: "Password Change Request",
         html: `<p>Please Change your password at this link: 
-            <a href="http://localhost:5173/newpassword/${token}">${token}</a>
-          </p>`,
+                <a href="http://localhost:5173/newpassword/${token}">${token}</a>
+              </p>`,
       });
     });
     res.send({ success: "Email sent. Please Check your Email" });

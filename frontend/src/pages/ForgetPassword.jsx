@@ -32,7 +32,10 @@ const ForgetPassword = () => {
       });
       form.resetFields();
       setLoading(false);
-      console.log("success:");
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
+      console.log("success");
     }
   };
   const onFinishFailed = (errorInfo) => {

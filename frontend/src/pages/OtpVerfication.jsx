@@ -9,9 +9,10 @@ import {
   Row,
   message,
   Space,
+  Flex,
 } from "antd";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
 const OtpVerfication = () => {
   const [form] = Form.useForm();
@@ -90,21 +91,26 @@ const OtpVerfication = () => {
                   >
                     <Input />
                   </Form.Item>
-                  <Form.Item
-                    wrapperCol={{
-                      offset: 3,
-                      span: 16,
-                    }}
-                  >
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      loading={loading}
-                      disabled={loading}
+                  <Flex justify="space-between">
+                    <p>
+                      I don't have an OTP. <Link to="/resendotp">Resend OTP</Link>
+                    </p>
+                    <Form.Item
+                      wrapperCol={{
+                        offset: 3,
+                        span: 16,
+                      }}
                     >
-                      Submit
-                    </Button>
-                  </Form.Item>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        loading={loading}
+                        disabled={loading}
+                      >
+                        Submit
+                      </Button>
+                    </Form.Item>
+                  </Flex>
                 </Form>
               </div>
             </Col>

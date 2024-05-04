@@ -1,24 +1,13 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Checkbox,
-  Form,
-  Input,
-  Col,
-  Divider,
-  Row,
-  message,
-  Space,
-  Flex,
-} from "antd";
+import { Button, Form, Input, Col, Row, message, Flex } from "antd";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
 const Registration = () => {
-  const [form] = Form.useForm();
   let [loading, setLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   let navigate = useNavigate();
+  const [form] = Form.useForm();
 
   const onFinish = async (values) => {
     setLoading(true);
@@ -35,16 +24,24 @@ const Registration = () => {
         },
       }
     );
-    messageApi.open({
-      type: "success",
-      content: data.data.success,
-    });
-    form.resetFields();
-    setLoading(false);
-    console.log("success:");
-    setTimeout(() => {
-      navigate(`/otpverification/${values.email}`);
-    }, 3000);
+    if (data.data.error === "email already in use") {
+      messageApi.open({
+        type: "error",
+        content: data.data.error,
+      });
+      setLoading(false);
+    } else {
+      messageApi.open({
+        type: "success",
+        content: data.data.success,
+      });
+      form.resetFields();
+      setLoading(false);
+      console.log("success", data);
+      setTimeout(() => {
+        navigate(`/otpverification/${values.email}`);
+      }, 3000);
+    }
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -80,6 +77,7 @@ const Registration = () => {
                   <Form.Item
                     label="Username"
                     name="username"
+                    className="from-box"
                     rules={[
                       {
                         required: true,
